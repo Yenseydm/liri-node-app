@@ -13,7 +13,7 @@ var command = process.argv[2];
 switch (command) {
 
         case "concert-this":
-                concert();
+                concerts();
                 break;
 
         case "spotify-this-song":
@@ -29,10 +29,25 @@ switch (command) {
                 break;
 }
 
-function concert() {
+function concerts() {
+        var axios = require("axios");
+        var artist = process.argv[3];
+
+        var queryUrl = "https://rest.bandsintown.com/artists/" + artist+ "/events?app_id=codingbootcamp";
+
         if (command === "concert-this") {
-                console.log("concert playing")
-        }
+
+                axios.get(queryUrl).then(
+                        function(response) {
+                                for ( i = 0; i < response.data.length; i++){
+                          console.log("------------------------------");
+                          console.log("Artist: " + response.data[1].lineup);
+                        console.log("Venue: " + response.data[1].venue.name)
+                          console.log("Event Date: " + response.data[1].datetime);
+                          console.log("------------------------------")
+                                }
+                        })
+        } 
 };
 
 function music() {
@@ -50,7 +65,7 @@ function movies() {
 
         if (command === "movie-this") {
 
-                axios.get("http://www.omdbapi.com/?t=" + film + "&y=&plot=short&apikey=trilogy").then(
+                axios.get(queryUrl).then(
                         function(response) {
                           console.log("------------------------------");
                           console.log("Title: " + response.data.Title);
@@ -78,7 +93,6 @@ function movies() {
                           }
                           console.log(error.config);
                         });
-                        console.log(queryUrl)
         }
 };
 function says() {
