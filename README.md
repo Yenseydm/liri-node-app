@@ -13,9 +13,13 @@ to the console, then the information printed to console will include the name of
            node liri.js spotify-this-song <'song name'>
 to the console, then the information printed will include the artist, song, album and a link to a preview of the song (if available). If no song is written, the the default song is "The Sign" by Ace of Base.
 
+![Spotify-this-song](https://github.com/Yenseydm/liri-node-app/blob/master/spotify-this-song.gif)
+
 "movie-this" retrieves information from the Bands in Town using axios. When user inputs:
            node liri.js movie-this <movie+name>
 to the console, then the information printed will include the title, year, rating, rotten tomatoes rating, country, language, plot and actors. If no movie is written, the the default song is "Mr. Nobody".
+
+![movie-this](https://github.com/Yenseydm/liri-node-app/blob/master/movie-this.gif)
 
 "do-what-it-says" retrieves information from the random.txt using fs. When user inputs:
            node liri.js do-what-it-says
