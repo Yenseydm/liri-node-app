@@ -7,7 +7,7 @@ Commands include: "concert-this", "spotify-this-song", "movie-this", and "do-wha
               node liri.js concert-this <artist+name>
 to the console, then the information printed to console will include the name of the venue the artist will play, location, and date of event. However, if the user does not input an artist's name then the default is to show artist Celine Dion.
 
-![Alt Text](https://github.com/yenseydm/liri-node-app/concert-this.gif)
+![Concert-this](https://github.com/Yenseydm/liri-node-app/blob/master/concert-this.gif)
 
 "spotify-this-song" retrieves information from the Spotify API. When user inputs:
            node liri.js spotify-this-song <'song name'>
