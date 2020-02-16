@@ -59,7 +59,7 @@ function concerts() {
 };
 
 //Spotify API
-function music() {
+function music(songs) {
        
 
         var songs = process.argv[3];
@@ -121,12 +121,15 @@ function movies() {
 
 
 function says() {
-        fs.readFile("random.txt", function read(error, data){
-                if(error){
+        fs.readFile("random.txt", "utf8", function(error, data){
+                var dataArr = data.split(",");
+                music(dataArr[0], dataArr[1]);
+                // should get dataArray[1] into music() to play song "I want it that way"
+                //which is obtained from random.txt
+
+        if(error){
                 return console.log(error);
-                }
-                var dataArr = data.split(',');
-                spotify(dataArr[0], dataArr[1])
+        }    
         });
 };
 
