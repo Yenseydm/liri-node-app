@@ -1,7 +1,11 @@
 require("dotenv").config();
-
+var fs = require('fs')
 var keys = require("./keys.js");
+var moment = require("moment");
+var axios = require("axios");
+var Spotify = require("node-spotify-api");
 
+var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
 
 switch (command) {
@@ -25,63 +29,74 @@ switch (command) {
 
 // Bands in town axios
 function concerts() {
-        var axios = require("axios");
+       
         var artist = process.argv[3];
-
+        
         var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
+
+        if (artist === undefined){
+                queryUrl = "https://rest.bandsintown.com/artists/celine+dion/events?app_id=codingbootcamp"
+                
+        }
 
         if (command === "concert-this") {
 
                 axios.get(queryUrl).then(
                         function (response) {
-                                for (i = 0; i < response.data.length; i++) {
                                         console.log("------------------------------");
-                                        console.log("Artist: " + response.data[i].lineup);
-                                        console.log("Venue: " + response.data[i].venue.name)
-                                        console.log("Event Date: " + response.data[i].datetime);
+                                        console.log("Artist: " + response.data[0].lineup);
+                                        console.log("Venue: " + response.data[0].venue.name)
+                                        console.log("Event Date: " + moment(response.data[0].datetime).format("MM/DD/YYYY"));
                                         console.log("------------------------------")
-                                }
+                                
                         }).catch(function (error) {
                                 console.error('Error occurred: ' + error);
+                                
                         });
-        }
+        } 
+
+
 };
 
 //Spotify API
 function music() {
-        var Spotify = require("node-spotify-api");
-
-        var spotify = new Spotify(keys.spotify);
+       
 
         var songs = process.argv[3];
+        if(songs === undefined){
+                songs = "the sign"
+        }
 
         if (command === "spotify-this-song") {
         
         spotify
         .search({ type: 'track', query: songs })
         .then(function(response) {
-        //   console.log("Artist: ");
-        //   console.log("Song: ");
-        //   console.log("Album: ")
-        //   console.log("Preview: ");
-
-        console.log(JSON.stringify(response.tracks))
+          console.log("------------------------------")
+          console.log("Artist: " + response.tracks.items[0].album.artists[0].name);
+          console.log("Song: " + response.tracks.items[0].name);
+          console.log("Album: " + response.tracks.items[0].album.name)
+          console.log("Preview: " + response.tracks.items[0].preview_url);
+          console.log("------------------------------")
           
         })
         .catch(function(err) {
           console.log(err);
         });
 
-        }
-};
+}
 
+};
 
 // OMDB Axios
 function movies() {
-        var axios = require("axios");
         var film = process.argv[3];
 
         var queryUrl = "http://www.omdbapi.com/?t=" + film + "&y=&plot=short&apikey=trilogy";
+
+        if (film === undefined){
+                queryUrl = "http://www.omdbapi.com/?t=mr.nobody&y=&plot=short&apikey=trilogy"
+        }
 
         if (command === "movie-this") {
 
@@ -98,28 +113,20 @@ function movies() {
                                 console.log("Actors: " + response.data.Actors);
                                 console.log("------------------------------")
                         })
-                        .catch(function (error) {
-                                if (error.response) {
-                                        console.log("---------------Data---------------");
-                                        console.log(error.response.data);
-                                        console.log("---------------Status---------------");
-                                        console.log(error.response.status);
-                                        console.log("---------------Status---------------");
-                                        console.log(error.response.headers);
-                                } else if (error.request) {
-                                        console.log(error.request);
-                                } else {
-                                        console.log("Error", error.message);
-                                }
-                                console.log(error.config);
-                        });
+                        .catch(function(err) {
+                                console.log(err);
+                              });
         }
 };
 
 
 function says() {
-        if (command === "do-what-it-says") {
-                console.log("do something please")
-        }
+        fs.readFile("random.txt", function read(error, data){
+                if(error){
+                return console.log(error);
+                }
+                var dataArr = data.split(',');
+                spotify(dataArr[0], dataArr[1])
+        });
 };
 
